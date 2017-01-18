@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">MovieFinder</string>
+    <string name="movie_title">Movie Title</string>
+    <string name="action_settings">Settings</string>
+    <string name="sortby_popular">Sort By Popular</string>
+    <string name="sortby_toprated">Sort By Top Rated</string>
 </resources>

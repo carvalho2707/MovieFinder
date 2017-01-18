@@ -64,7 +64,7 @@ public final class MovieDatabaseJsonUtils {
 
             JSONObject movie = movieArray.getJSONObject(i);
 
-            posterPath = NetworkUtils.IMAGE_URL + TMDB_POSTER_NORMAL_SIZE + movie.getString(TMDB_POSTER);
+            posterPath = movie.getString(TMDB_POSTER);
             title = movie.getString(TMDB_TITLE);
             synopsis = movie.getString(TMDB_OVERVIEW);
             userRate = movie.getString(TMDB_USER_RATE);

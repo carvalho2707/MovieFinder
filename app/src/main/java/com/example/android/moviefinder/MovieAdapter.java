@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.android.moviefinder.model.Movie;
+import com.example.android.moviefinder.utils.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -17,6 +18,7 @@ import com.squareup.picasso.Picasso;
  */
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapterViewHolder> {
+    private static final String TMDB_POSTER_NORMAL_SIZE = "w500";
     private final MovieAdapterOnClickHandler mClickHandler;
     private Movie[] movieArray;
 
@@ -66,7 +68,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
 
     @Override
     public void onBindViewHolder(MovieAdapterViewHolder viewHolder, int position) {
-        Picasso.with(viewHolder.mMoviePoster.getContext()).load(movieArray[position].getPosterUrl()).into(viewHolder.mMoviePoster);
+        Picasso.with(viewHolder.mMoviePoster.getContext()).load(NetworkUtils.IMAGE_URL + TMDB_POSTER_NORMAL_SIZE + movieArray[position].getPosterUrl()).into(viewHolder.mMoviePoster);
     }
 
     public void setMovieArray(Movie[] movieData) {
