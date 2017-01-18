@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorBlueSoft">#009688</color>
+    <color name="appBarCustomColor">#212121</color>
 </resources>

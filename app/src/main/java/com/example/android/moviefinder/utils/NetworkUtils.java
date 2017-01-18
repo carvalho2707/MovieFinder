@@ -1,5 +1,8 @@
 package com.example.android.moviefinder.utils;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.util.Log;
 
@@ -24,7 +27,7 @@ public final class NetworkUtils {
     public static final String TOP_RATED = "movie/top_rated";
 
     private static final String API_PARAM = "api_key";
-    private static final String API_KEY = "xxxx";
+    private static final String API_KEY = "xxxxx";
 
     public static URL buildUrlTopRated(String preference) {
         return buildUrl(TOP_RATED);
@@ -75,5 +78,12 @@ public final class NetworkUtils {
         } finally {
             urlConnection.disconnect();
         }
+    }
+
+    public static boolean isOnline(Context context) {
+        ConnectivityManager cm =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 }

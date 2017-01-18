@@ -10,4 +10,11 @@
         android:id="@+id/sortby_toprated"
         android:title="@string/sortby_toprated"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_refresh"
+        android:orderInCategory="1"
+        android:icon="@drawable/ic_menu_refresh"
+        android:title="@string/action_refresh"
+        app:showAsAction="ifRoom"/>
 </menu>
