@@ -17,11 +17,11 @@ public final class NetworkUtils {
 
     private static final String TAG = NetworkUtils.class.getSimpleName();
 
-    private static final String IMAGE_URL = "http://image.tmdb.org/t/p/";
+    public static final String IMAGE_URL = "http://image.tmdb.org/t/p/";
     private static final String BASE_URL = "http://api.themoviedb.org/3/";
 
-    private static final String MOST_POPULAR = "movie/popular";
-    private static final String TOP_RATED = "movie/top_rated";
+    public static final String MOST_POPULAR = "movie/popular";
+    public static final String TOP_RATED = "movie/top_rated";
 
     private static final String API_PARAM = "api_key";
 
@@ -34,8 +34,8 @@ public final class NetworkUtils {
     }
 
     public static URL buildUrl(String preference) {
-        Uri builtUri = Uri.parse(BASE_URL).buildUpon()
-                .appendPath(preference)
+        Uri builtUri = Uri.parse(BASE_URL + preference).buildUpon()
+                .appendQueryParameter(API_PARAM,"aff4937b06de5edce12992247f3068c3")
                 .build();
 
         URL url = null;

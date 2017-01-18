@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.example.android.moviefinder.model.Movie;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -17,15 +18,14 @@ import com.squareup.picasso.Picasso;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapterViewHolder> {
     private final MovieAdapterOnClickHandler mClickHandler;
-    private Context context;
-    private String[] posterURLArray;
+    private Movie[] movieArray;
 
     public MovieAdapter(MovieAdapterOnClickHandler handler) {
         mClickHandler = handler;
     }
 
     public interface MovieAdapterOnClickHandler {
-        public void onClick(int position);
+        void onClick(Movie selected);
 
     }
 
@@ -42,16 +42,16 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
-            mClickHandler.onClick(position);
+            mClickHandler.onClick(movieArray[position]);
         }
     }
 
     @Override
     public int getItemCount() {
-        if (posterURLArray == null) {
+        if (movieArray == null) {
             return 0;
         }
-        return posterURLArray.length;
+        return movieArray.length;
     }
 
     @Override
@@ -60,17 +60,17 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
         int layoutId = R.layout.movie_item;
         LayoutInflater inflater = LayoutInflater.from(context);
         boolean shouldAttachToParentImmediately = false;
-        View view = inflater.inflate(R.layout.movie_item, viewGroup, shouldAttachToParentImmediately);
+        View view = inflater.inflate(layoutId, viewGroup, shouldAttachToParentImmediately);
         return new MovieAdapterViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(MovieAdapterViewHolder viewHolder, int position) {
-        Picasso.with(viewHolder.mMoviePoster.getContext()).load(posterURLArray[position]).into(viewHolder.mMoviePoster);
+        Picasso.with(viewHolder.mMoviePoster.getContext()).load(movieArray[position].getPosterUrl()).into(viewHolder.mMoviePoster);
     }
 
-    public void setMovieArray(String[] posterArray) {
-        posterURLArray = posterArray;
+    public void setMovieArray(Movie[] movieData) {
+        movieArray = movieData;
         notifyDataSetChanged();
     }
 }

@@ -4,6 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.graphics.Bitmap;
 
+import com.example.android.moviefinder.model.Movie;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,18 +16,22 @@ import java.net.HttpURLConnection;
  * Utility functions to handle OpenWeatherMap JSON data.
  */
 public final class MovieDatabaseJsonUtils {
+    private static final String TMDB_RESULTS = "results";
+    private static final String TMDB_POSTER = "poster_path";
+    private static final String TMDB_ERROR_MOVIES = "status_code";
+    private static final String TMDB_POSTER_NORMAL_SIZE = "w500";
+    private static final String TMDB_TITLE = "title";
+    private static final String TMDB_OVERVIEW = "overview";
+    private static final String TMDB_RELEASE_DATE = "release_date";
+    private static final String TMDB_USER_RATE = "vote_average";
 
-    public static String[] getSimpleWeatherStringsFromJson(Context context, String moviesJsonStr)
+    public static Movie[] getSimpleWeatherStringsFromJson(Context context, String moviesJsonStr)
             throws JSONException {
 
-        final String TMDB_RESULTS = "results";
 
-        final String TMDB_POSTER = "poster_path";
-
-        final String TMDB_ERROR_MOVIES = "status_code";
 
         /* String array to hold each day's weather String */
-        String[] posterArray = null;
+        Movie[] results = null;
 
         JSONObject movieObj = new JSONObject(moviesJsonStr);
 
@@ -47,18 +53,27 @@ public final class MovieDatabaseJsonUtils {
 
         JSONArray movieArray = movieObj.getJSONArray(TMDB_RESULTS);
 
-        posterArray = new String[movieArray.length()];
+        results = new Movie[movieArray.length()];
 
         for (int i = 0; i < movieArray.length(); i++) {
-            String postalPath;
+            String posterPath;
+            String title;
+            String synopsis;
+            String userRate;
+            String releaseDate;
 
             JSONObject movie = movieArray.getJSONObject(i);
 
-            postalPath = movie.getString(TMDB_POSTER);
+            posterPath = NetworkUtils.IMAGE_URL + TMDB_POSTER_NORMAL_SIZE + movie.getString(TMDB_POSTER);
+            title = movie.getString(TMDB_TITLE);
+            synopsis = movie.getString(TMDB_OVERVIEW);
+            userRate = movie.getString(TMDB_USER_RATE);
+            releaseDate = movie.getString(TMDB_RELEASE_DATE);
 
-            posterArray[i] = postalPath;
+            Movie tmp = new Movie(posterPath, title, synopsis, userRate, releaseDate);
+            results[i] = tmp;
         }
 
-        return posterArray;
+        return results;
     }
 }
