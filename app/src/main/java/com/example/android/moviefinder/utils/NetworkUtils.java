@@ -24,6 +24,7 @@ public final class NetworkUtils {
     public static final String TOP_RATED = "movie/top_rated";
 
     private static final String API_PARAM = "api_key";
+    private static final String API_KEY = "xxxx";
 
     public static URL buildUrlTopRated(String preference) {
         return buildUrl(TOP_RATED);
@@ -35,7 +36,7 @@ public final class NetworkUtils {
 
     public static URL buildUrl(String preference) {
         Uri builtUri = Uri.parse(BASE_URL + preference).buildUpon()
-                .appendQueryParameter(API_PARAM,"aff4937b06de5edce12992247f3068c3")
+                .appendQueryParameter(API_PARAM, API_KEY)
                 .build();
 
         URL url = null;
