@@ -1,10 +1,13 @@
 package com.example.android.moviefinder.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by tiago.carvalho on 01/18/17.
  */
 
-public class Movie {
+public class Movie implements Parcelable {
 
     private String posterUrl;
     private String title;
@@ -18,6 +21,40 @@ public class Movie {
         this.synopsis = synopsis;
         this.userRate = userRate;
         this.releaseDate = releaseDate;
+    }
+
+    protected Movie(Parcel in) {
+        posterUrl = in.readString();
+        title = in.readString();
+        synopsis = in.readString();
+        userRate = in.readString();
+        releaseDate = in.readString();
+    }
+
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(posterUrl);
+        dest.writeString(title);
+        dest.writeString(synopsis);
+        dest.writeString(userRate);
+        dest.writeString(releaseDate);
     }
 
     public String getPosterUrl() {

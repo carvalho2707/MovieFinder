@@ -1,10 +1,8 @@
 package com.example.android.moviefinder;
 
-import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
@@ -15,16 +13,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.android.moviefinder.model.Movie;
-import com.example.android.moviefinder.utils.MovieDatabaseJsonUtils;
+import com.example.android.moviefinder.tasks.MovieAsyncTask;
+import com.example.android.moviefinder.tasks.MovieAsyncTaskListener;
 import com.example.android.moviefinder.utils.NetworkUtils;
 
-import org.json.JSONException;
-import org.w3c.dom.Text;
-
-import java.io.IOException;
-import java.net.URL;
-
-public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler {
+public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler, MovieAsyncTaskListener {
     private static final String TITLE = "title";
     private static final String OVERVIEW = "overview";
     private static final String RELEASE_DATE = "release_date";
@@ -70,50 +63,18 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         startActivity(intent);
     }
 
-    public class MovieAsyncTask extends AsyncTask<String, Void, Movie[]> {
+    @Override
+    public void beforeExecute() {
+        mLoadingIndicator.setVisibility(View.VISIBLE);
+    }
 
-        @Override
-        protected Movie[] doInBackground(String... params) {
-            if (params.length == 0) {
-                return null;
-            }
-
-            String pref = params[0];
-            URL movieRequestUrl = NetworkUtils.buildUrl(pref);
-
-            Context context = MainActivity.this;
-            if (NetworkUtils.isOnline(context)) {
-                try {
-                    String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(movieRequestUrl);
-
-                    Movie[] movieData = MovieDatabaseJsonUtils.getSimpleWeatherStringsFromJson(MainActivity.this, jsonMovieResponse);
-
-                    return movieData;
-
-                } catch (IOException | JSONException e) {
-                    e.printStackTrace();
-                    return null;
-                }
-            } else {
-                return null;
-            }
-
-        }
-
-        @Override
-        protected void onPostExecute(Movie[] movieData) {
-            mLoadingIndicator.setVisibility(View.INVISIBLE);
-            if (movieData != null) {
-                movieAdapter.setMovieArray(movieData);
-            } else {
-                showErrorMessage();
-            }
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            mLoadingIndicator.setVisibility(View.VISIBLE);
+    @Override
+    public void afterExecute(Movie[] movieData) {
+        mLoadingIndicator.setVisibility(View.INVISIBLE);
+        if (movieData != null) {
+            movieAdapter.setMovieArray(movieData);
+        } else {
+            showErrorMessage();
         }
     }
 
@@ -144,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private void changeSort(String newSort) {
         if (!currentSort.equals(newSort)) {
             currentSort = newSort;
-            new MovieAsyncTask().execute(currentSort);
+            new MovieAsyncTask(MainActivity.this, this).execute(currentSort);
         }
     }
 
@@ -160,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     private void loadMovieData() {
         showMovieDataView();
-        new MovieAsyncTask().execute(currentSort);
+        new MovieAsyncTask(MainActivity.this, this).execute(currentSort);
     }
 
 }

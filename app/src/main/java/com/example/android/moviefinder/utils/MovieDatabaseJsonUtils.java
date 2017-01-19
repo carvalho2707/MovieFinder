@@ -1,8 +1,6 @@
 package com.example.android.moviefinder.utils;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.graphics.Bitmap;
 
 import com.example.android.moviefinder.model.Movie;
 

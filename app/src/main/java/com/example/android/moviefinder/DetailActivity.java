@@ -1,18 +1,16 @@
 package com.example.android.moviefinder;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.android.moviefinder.R;
 import com.example.android.moviefinder.utils.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
-import org.w3c.dom.Text;
-
-import java.util.Locale;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class DetailActivity extends AppCompatActivity {
     private static final String TITLE = "title";
@@ -22,22 +20,23 @@ public class DetailActivity extends AppCompatActivity {
     private static final String POSTER = "poster_path";
     private static final String TMDB_POSTER_NORMAL_SIZE = "w342";
 
-    private TextView mMovieTitle;
-    private ImageView mPoster;
-    private TextView mReleaseDate;
-    private TextView mSynopses;
-    private TextView mUserRate;
+   C(R.id.tv_movie_title)
+    TextView mMovieTitle;
+    @BindView(R.id.iv_movie_thumbnail)
+    ImageView mPoster;
+    @BindView(R.id.tv_movie_release)
+    TextView mReleaseDate;
+    @BindView(R.id.tv_synopsis)
+    TextView mSynopses;
+    @BindView(R.id.tv_movie_rate)
+    TextView mUserRate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        mMovieTitle = (TextView) findViewById(R.id.tv_movie_title);
-        mPoster = (ImageView) findViewById(R.id.iv_movie_thumbnail);
-        mReleaseDate = (TextView) findViewById(R.id.tv_movie_release);
-        mSynopses = (TextView) findViewById(R.id.tv_synopsis);
-        mUserRate = (TextView) findViewById(R.id.tv_movie_rate);
+        ButterKnife.bind(this);
 
         Intent intentThatStartedThisActivity = getIntent();
         if (intentThatStartedThisActivity != null) {
