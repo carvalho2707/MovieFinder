@@ -20,7 +20,7 @@ public class DetailActivity extends AppCompatActivity {
     private static final String POSTER = "poster_path";
     private static final String TMDB_POSTER_NORMAL_SIZE = "w342";
 
-   C(R.id.tv_movie_title)
+    @BindView(R.id.tv_movie_title)
     TextView mMovieTitle;
     @BindView(R.id.iv_movie_thumbnail)
     ImageView mPoster;
