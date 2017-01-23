@@ -6,4 +6,5 @@
     <string name="sortby_toprated">Sort By Top Rated</string>
     <string name="error_message">An error has occurred. Please try again and Refresh</string>
     <string name="action_refresh">Refresh</string>
+    <string name="mark_favorite">MARK AS FAVORITE</string>
 </resources>

@@ -34,7 +34,7 @@ public class MovieAsyncTask extends AsyncTask<String, Void, Movie[]> {
             try {
                 String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(movieRequestUrl);
 
-                Movie[] movieData = MovieDatabaseJsonUtils.getSimpleWeatherStringsFromJson(context, jsonMovieResponse);
+                Movie[] movieData = MovieDatabaseJsonUtils.getMovieInfoFromJson(context, jsonMovieResponse);
 
                 return movieData;
 

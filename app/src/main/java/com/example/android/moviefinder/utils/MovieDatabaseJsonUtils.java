@@ -20,15 +20,13 @@ public final class MovieDatabaseJsonUtils {
     private static final String TMDB_POSTER_NORMAL_SIZE = "w500";
     private static final String TMDB_TITLE = "title";
     private static final String TMDB_OVERVIEW = "overview";
+    private static final String TMDB_ID = "id";
     private static final String TMDB_RELEASE_DATE = "release_date";
     private static final String TMDB_USER_RATE = "vote_average";
 
-    public static Movie[] getSimpleWeatherStringsFromJson(Context context, String moviesJsonStr)
+    public static Movie[] getMovieInfoFromJson(Context context, String moviesJsonStr)
             throws JSONException {
 
-
-
-        /* String array to hold each day's weather String */
         Movie[] results = null;
 
         JSONObject movieObj = new JSONObject(moviesJsonStr);
@@ -59,6 +57,7 @@ public final class MovieDatabaseJsonUtils {
             String synopsis;
             String userRate;
             String releaseDate;
+            int id;
 
             JSONObject movie = movieArray.getJSONObject(i);
 
@@ -67,8 +66,9 @@ public final class MovieDatabaseJsonUtils {
             synopsis = movie.getString(TMDB_OVERVIEW);
             userRate = movie.getString(TMDB_USER_RATE);
             releaseDate = movie.getString(TMDB_RELEASE_DATE);
+            id = movie.getInt(TMDB_ID);
 
-            Movie tmp = new Movie(posterPath, title, synopsis, userRate, releaseDate);
+            Movie tmp = new Movie(id, posterPath, title, synopsis, userRate, releaseDate);
             results[i] = tmp;
         }
 

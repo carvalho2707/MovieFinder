@@ -2,9 +2,12 @@ package com.example.android.moviefinder;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.example.android.moviefinder.utils.NetworkUtils;
 import com.squareup.picasso.Picasso;
@@ -30,6 +33,8 @@ public class DetailActivity extends AppCompatActivity {
     TextView mSynopses;
     @BindView(R.id.tv_movie_rate)
     TextView mUserRate;
+    @BindView(R.id.tb_mark_favorite)
+    ToggleButton mToggleFavorite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,5 +66,16 @@ public class DetailActivity extends AppCompatActivity {
             }
 
         }
+
+        mToggleFavorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    mToggleFavorite.setTextColor(ContextCompat.getColor(buttonView.getContext(), R.color.colorBlueSoft));
+                } else {
+                    mToggleFavorite.setTextColor(ContextCompat.getColor(buttonView.getContext(), android.R.color.darker_gray));
+                }
+            }
+        });
+
     }
 }
