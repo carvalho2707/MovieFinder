@@ -6,9 +6,6 @@ import com.example.android.moviefinder.model.Movie;
  * Created by tiago.carvalho on 01/19/17.
  */
 
-public interface MovieAsyncTaskListener {
+public interface MovieAsyncTaskLoaderListener {
     void beforeExecute();
-
-    void afterExecute(Movie[] movieData);
-
 }
