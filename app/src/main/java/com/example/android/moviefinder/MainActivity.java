@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.android.moviefinder.adapters.MovieAdapter;
 import com.example.android.moviefinder.model.Movie;
 import com.example.android.moviefinder.tasks.MovieAsyncTaskLoader;
 import com.example.android.moviefinder.tasks.MovieAsyncTaskLoaderListener;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private static final String RELEASE_DATE = "release_date";
     private static final String USER_RATE = "vote_average";
     private static final String POSTER = "poster_path";
+    private static final String ID = "tmdb_id";
 
     private static final String SORT_KEY = "sort_key";
     private static final String FAVORITE_KEY = "favorite_key";
@@ -108,6 +110,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         intent.putExtra(OVERVIEW, selected.getSynopsis());
         intent.putExtra(RELEASE_DATE, selected.getReleaseDate());
         intent.putExtra(USER_RATE, selected.getUserRate());
+        intent.putExtra(ID, selected.getId());
         startActivity(intent);
     }
 

@@ -3,6 +3,8 @@ package com.example.android.moviefinder.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.List;
+
 /**
  * Created by tiago.carvalho on 01/18/17.
  */
@@ -15,6 +17,8 @@ public class Movie implements Parcelable {
     private String synopsis;
     private String userRate;
     private String releaseDate;
+    private List<String> trailerList;
+    private List<String> reviewList;
 
     public Movie(int id, String posterUrl, String title, String synopsis, String userRate, String releaseDate) {
         this.id = id;

@@ -22,12 +22,18 @@ public final class NetworkUtils {
 
     public static final String IMAGE_URL = "http://image.tmdb.org/t/p/";
     private static final String BASE_URL = "http://api.themoviedb.org/3/";
+    private static final String AUTHORITY_BASE = "api.themoviedb.org";
+    private static final String SCHEME_BASE = "http";
+    private static final String MOVIE_PATH = "movie";
 
     public static final String MOST_POPULAR = "movie/popular";
     public static final String TOP_RATED = "movie/top_rated";
 
+    public static final String SEARCH_REVIEWS = "reviews";
+    public static final String SEARCH_TRAILERS = "videos";
+
     private static final String API_PARAM = "api_key";
-    private static final String API_KEY = "xxxxx";
+    private static final String API_KEY = "aff4937b06de5edce12992247f3068c3";
 
     public static URL buildUrlTopRated(String preference) {
         return buildUrl(TOP_RATED);
@@ -49,8 +55,50 @@ public final class NetworkUtils {
             e.printStackTrace();
         }
 
-        Log.v(TAG, "Built URI " + url);
+        Log.v(TAG, "buildUrl " + url);
 
+        return url;
+    }
+
+    public static URL buildUrlFetchReviewsById(int id) {
+        Uri.Builder builder = new Uri.Builder();
+        Uri uri = builder.scheme(SCHEME_BASE)
+                .authority(AUTHORITY_BASE)
+                .appendPath("3")
+                .appendPath(MOVIE_PATH)
+                .appendPath(String.valueOf(id))
+                .appendPath(SEARCH_REVIEWS)
+                .appendQueryParameter(API_PARAM, API_KEY).build();
+
+        URL url = null;
+        try {
+            url = new URL(uri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        Log.v(TAG, "buildUrlFetchReviewsById " + url);
+        return url;
+    }
+
+    public static URL buildUrlFetchTrailersById(int id) {
+        Uri.Builder builder = new Uri.Builder();
+        Uri uri = builder.scheme(SCHEME_BASE)
+                .authority(AUTHORITY_BASE)
+                .appendPath("3")
+                .appendPath(MOVIE_PATH)
+                .appendPath(String.valueOf(id))
+                .appendPath(SEARCH_TRAILERS)
+                .appendQueryParameter(API_PARAM, API_KEY).build();
+
+        URL url = null;
+        try {
+            url = new URL(uri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        Log.v(TAG, "buildUrlFetchReviewsById " + url);
         return url;
     }
 

@@ -1,4 +1,4 @@
-package com.example.android.moviefinder;
+package com.example.android.moviefinder.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +8,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.example.android.moviefinder.R;
 import com.example.android.moviefinder.model.Movie;
 import com.example.android.moviefinder.utils.NetworkUtils;
 import com.squareup.picasso.Picasso;
@@ -27,7 +28,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
 
     public interface MovieAdapterOnClickHandler {
         void onClick(Movie selected);
-
     }
 
     public class MovieAdapterViewHolder extends RecyclerView.ViewHolder implements OnClickListener {

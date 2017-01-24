@@ -4,7 +4,7 @@ import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 
 import com.example.android.moviefinder.model.Movie;
-import com.example.android.moviefinder.utils.MovieDatabaseJsonUtils;
+import com.example.android.moviefinder.utils.TheMovieDatabaseJsonUtils;
 import com.example.android.moviefinder.utils.NetworkUtils;
 
 import org.json.JSONException;
@@ -45,7 +45,7 @@ public class MovieAsyncTaskLoader extends AsyncTaskLoader<Movie[]> {
         try {
             String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(movieRequestUrl);
 
-            Movie[] movieData = MovieDatabaseJsonUtils.getMovieInfoFromJson(this.getContext(), jsonMovieResponse);
+            Movie[] movieData = TheMovieDatabaseJsonUtils.getMovieInfoFromJson(this.getContext(), jsonMovieResponse);
             return movieData;
         } catch (IOException | JSONException e) {
             e.printStackTrace();
