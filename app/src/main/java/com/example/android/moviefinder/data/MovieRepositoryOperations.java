@@ -1,6 +1,7 @@
 package com.example.android.moviefinder.data;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -14,25 +15,25 @@ import java.util.List;
  */
 
 public class MovieRepositoryOperations implements MovieRepositoryInterface {
-    private SQLiteOpenHelper dbhandler;
+    private SQLiteOpenHelper dbHandler;
     private SQLiteDatabase database;
 
     public static final String LOGTAG = "MOVIE_MNGMNT_SYS";
 
     public MovieRepositoryOperations(Context context) {
-        dbhandler = new MovieFinderDBHelper(context);
+        dbHandler = new MovieFinderDBHelper(context);
     }
 
     public void open() {
         Log.i(LOGTAG, "Database Opened");
-        database = dbhandler.getWritableDatabase();
+        database = dbHandler.getWritableDatabase();
 
 
     }
 
     public void close() {
         Log.i(LOGTAG, "Database Closed");
-        dbhandler.close();
+        dbHandler.close();
 
     }
 

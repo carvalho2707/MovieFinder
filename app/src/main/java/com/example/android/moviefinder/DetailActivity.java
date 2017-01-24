@@ -57,8 +57,10 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
 
     private RecyclerView mRecyclerViewReviews;
     private ReviewAdapter mReviewsAdapter;
+
     private RecyclerView mRecyclerViewTrailers;
     private TrailerAdapter mTrailerAdapter;
+
     private static final int REVIEWS_LOADER_ID = 1;
     private static final int TRAILER_LOADER_ID = 2;
     private int movieId;
@@ -69,6 +71,9 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
         setContentView(R.layout.activity_detail);
 
         ButterKnife.bind(this);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         Intent intentThatStartedThisActivity = getIntent();
         if (intentThatStartedThisActivity != null) {
@@ -116,12 +121,12 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
         mRecyclerViewReviews.setAdapter(mReviewsAdapter);
         mRecyclerViewReviews.setHasFixedSize(true);
 
-        mRecyclerViewTrailers = (RecyclerView) findViewById(R.id.rv_reviews);
+        mRecyclerViewTrailers = (RecyclerView) findViewById(R.id.rv_trailers);
 
         LinearLayoutManager layoutTrailerManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerViewTrailers.setLayoutManager(layoutTrailerManager);
 
-        mTrailerAdapter = new TrailerAdapter();
+        mTrailerAdapter = new TrailerAdapter(this);
         mRecyclerViewTrailers.setAdapter(mTrailerAdapter);
         mRecyclerViewTrailers.setHasFixedSize(true);
 

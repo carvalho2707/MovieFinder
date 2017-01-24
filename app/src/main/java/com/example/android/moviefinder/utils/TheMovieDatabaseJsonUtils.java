@@ -9,6 +9,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.HttpURLConnection;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class TheMovieDatabaseJsonUtils {
     private static final String TMDB_RESULTS = "results";
@@ -24,7 +26,7 @@ public final class TheMovieDatabaseJsonUtils {
     private static final String TMDB_TRAILER_TYPE = "type";
     private static final String TMDB_TRAILER_TYPE_TRAILER = "Trailer";
     private static final String TMDB_TRAILER_SITE = "site";
-    private static final String TMDB_TRAILER_SITE_YOUTUBE = "site";
+    private static final String TMDB_TRAILER_SITE_YOUTUBE = "YouTube";
     private static final String TMDB_REVIEW_CONTENT = "content";
 
     public static Movie[] getMovieInfoFromJson(Context context, String moviesJsonStr)
@@ -80,6 +82,7 @@ public final class TheMovieDatabaseJsonUtils {
 
     public static String[] getTrailersFromJson(String movieTrailerResponse) throws JSONException {
         String[] results = null;
+        List<String> tempList = new ArrayList<>();
         JSONObject movieObj = new JSONObject(movieTrailerResponse);
         if (movieObj.has(TMDB_ERROR_MOVIES)) {
             int errorCode = movieObj.getInt(TMDB_ERROR_MOVIES);
@@ -97,7 +100,7 @@ public final class TheMovieDatabaseJsonUtils {
         }
 
         JSONArray trailersArray = movieObj.getJSONArray(TMDB_RESULTS);
-        results = new String[trailersArray.length()];
+
 
         for (int i = 0; i < trailersArray.length(); i++) {
             JSONObject obj = trailersArray.getJSONObject(i);
@@ -105,9 +108,12 @@ public final class TheMovieDatabaseJsonUtils {
             String type = obj.getString(TMDB_TRAILER_TYPE);
             if (site.equals(TMDB_TRAILER_SITE_YOUTUBE) && type.equals(TMDB_TRAILER_TYPE_TRAILER)) {
                 String path = obj.getString(TMDB_VIDEO_KEY);
-                results[i] = path;
+                tempList.add(path);
             }
         }
+
+        results = new String[tempList.size()];
+        results = tempList.toArray(results);
         return results;
     }
 

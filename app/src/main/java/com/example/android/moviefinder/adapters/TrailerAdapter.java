@@ -20,6 +20,10 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
         public void onClick(String url);
     }
 
+    public TrailerAdapter(TrailerAdapterOnClickHandler handler) {
+        mClickHandler = handler;
+    }
+
 
     @Override
     public TrailerAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
