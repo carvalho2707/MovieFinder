@@ -33,7 +33,7 @@ public final class NetworkUtils {
     public static final String SEARCH_TRAILERS = "videos";
 
     private static final String API_PARAM = "api_key";
-    private static final String API_KEY = "aff4937b06de5edce12992247f3068c3";
+    private static final String API_KEY = "xxxxx";
 
     public static URL buildUrlTopRated(String preference) {
         return buildUrl(TOP_RATED);
