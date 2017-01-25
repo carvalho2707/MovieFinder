@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class MovieFinderDBHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "moviefinder.db";
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
 
     public MovieFinderDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -22,9 +22,13 @@ public class MovieFinderDBHelper extends SQLiteOpenHelper {
         final String createQuery =
                 "CREATE TABLE " + MovieFinderContract.MovieFinderEntry.TABLE_NAME + " ( " +
                         MovieFinderContract.MovieFinderEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        MovieFinderContract.MovieFinderEntry.COLUMN_ID + "INTEGER NOT NULL, " +
-                        MovieFinderContract.MovieFinderEntry.COLUMN_MOVIE_TITLE + "TEXT NOT NULL, " +
-                        " UNIQUE ( " + MovieFinderContract.MovieFinderEntry.COLUMN_ID + " ) ON CONFLICT REPLACE";
+                        MovieFinderContract.MovieFinderEntry.COLUMN_TMDBID + "INTEGER NOT NULL, " +
+                        MovieFinderContract.MovieFinderEntry.COLUMN_TITLE + "TEXT NOT NULL, " +
+                        MovieFinderContract.MovieFinderEntry.COLUMN_OVERVIEW + "TEXT NOT NULL, " +
+                        MovieFinderContract.MovieFinderEntry.COLUMN_RELEASE_DATE + "TEXT NOT NULL, " +
+                        MovieFinderContract.MovieFinderEntry.COLUMN_USER_RATE + "TEXT NOT NULL, " +
+                        MovieFinderContract.MovieFinderEntry.COLUMN_POSTER + "TEXT NOT NULL, " +
+                        " UNIQUE ( " + MovieFinderContract.MovieFinderEntry._ID + " ) ON CONFLICT REPLACE";
 
         db.execSQL(createQuery);
     }
