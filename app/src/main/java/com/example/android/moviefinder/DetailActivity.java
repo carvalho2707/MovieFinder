@@ -5,11 +5,15 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.app.ShareCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -226,5 +230,41 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + videoId));
         intent.putExtra("VIDEO_ID", videoId);
         startActivity(intent);
+    }
+
+    private Intent createShareForecastIntent() {
+        String[] trailers = mTrailerAdapter.getTrailerData();
+        trailers = null;
+        if (null != trailers && trailers.length > 0) {
+            String trailerSuffix = trailers[0];
+            String urlToShare = "https://www.youtube.com/watch?v=" + trailerSuffix;
+            Intent shareIntent = ShareCompat.IntentBuilder.from(this)
+                    .setType("text/plain")
+                    .setText(urlToShare)
+                    .getIntent();
+            shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+            return shareIntent;
+        }
+        return null;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.details_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_share) {
+            Intent shareIntent = createShareForecastIntent();
+            if (shareIntent != null) {
+                startActivity(shareIntent);
+            }
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

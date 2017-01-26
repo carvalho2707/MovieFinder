@@ -43,6 +43,9 @@ public class MovieAsyncTaskLoader extends AsyncTaskLoader<Movie[]> {
     public Movie[] loadInBackground() {
         URL movieRequestUrl = NetworkUtils.buildUrl(sort);
         try {
+            if (!NetworkUtils.isOnline(this.getContext())) {
+                return null;
+            }
             String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(movieRequestUrl);
 
             Movie[] movieData = TheMovieDatabaseJsonUtils.getMovieInfoFromJson(this.getContext(), jsonMovieResponse);

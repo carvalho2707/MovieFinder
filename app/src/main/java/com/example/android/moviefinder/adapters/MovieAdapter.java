@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import com.example.android.moviefinder.R;
 import com.example.android.moviefinder.model.Movie;
 import com.example.android.moviefinder.utils.NetworkUtils;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -67,7 +68,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
 
     @Override
     public void onBindViewHolder(MovieAdapterViewHolder viewHolder, int position) {
-        Picasso.with(viewHolder.mMoviePoster.getContext()).load(NetworkUtils.IMAGE_URL + TMDB_POSTER_NORMAL_SIZE + movieArray[position].getPosterUrl()).into(viewHolder.mMoviePoster);
+        if (NetworkUtils.isOnline(viewHolder.mMoviePoster.getContext())) {
+            Picasso.with(viewHolder.mMoviePoster.getContext()).load(NetworkUtils.IMAGE_URL + TMDB_POSTER_NORMAL_SIZE + movieArray[position].getPosterUrl()).into(viewHolder.mMoviePoster);
+        } else {
+            Picasso.with(viewHolder.mMoviePoster.getContext()).load(NetworkUtils.IMAGE_URL + TMDB_POSTER_NORMAL_SIZE + movieArray[position].getPosterUrl()).networkPolicy(NetworkPolicy.OFFLINE).into(viewHolder.mMoviePoster);
+        }
     }
 
     public void setMovieArray(Movie[] movieData) {
