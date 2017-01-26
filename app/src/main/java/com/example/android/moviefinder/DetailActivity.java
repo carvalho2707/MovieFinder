@@ -152,7 +152,13 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
                         mMovieBaseId = Long.valueOf(id);
 
                         if (uri != null) {
-                            Toast.makeText(getBaseContext(), uri.toString(), Toast.LENGTH_LONG).show();
+                            String textSuccess = getString(R.string.save_success);
+                            Toast.makeText(getBaseContext(), textSuccess, Toast.LENGTH_LONG).show();
+                        } else {
+                            String textSuccess = getString(R.string.save_no_success);
+                            Toast.makeText(getBaseContext(), textSuccess, Toast.LENGTH_LONG).show();
+                            mToggleFavorite.setChecked(false);
+                            mToggleFavorite.setTextColor(ContextCompat.getColor(getBaseContext(), android.R.color.darker_gray));
                         }
                     } else {
                         mToggleFavorite.setTextColor(ContextCompat.getColor(buttonView.getContext(), android.R.color.darker_gray));

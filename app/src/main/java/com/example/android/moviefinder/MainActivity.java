@@ -172,10 +172,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private void changeSort(String newSort) {
         favItem.setIcon(android.R.drawable.star_off);
         currentFilterFavorites = "OFF";
-        if (!currentSort.equals(newSort)) {
-            currentSort = newSort;
-            refreshData();
-        }
+        currentSort = newSort;
+        refreshData();
     }
 
     private void showErrorMessage() {

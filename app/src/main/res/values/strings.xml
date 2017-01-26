@@ -8,7 +8,9 @@
     <string name="action_refresh">Refresh</string>
     <string name="mark_favorite">MARK AS FAVORITE</string>
     <string name="filter_favorites">Filter By Favorites</string>
-    <string name="tv_reviews_title">Reviews</string>
-    <string name="tv_trailers_title">Trailers</string>
+    <string name="tv_reviews_title">Reviews: </string>
+    <string name="tv_trailers_title">Trailers: </string>
     <string name="action_share">Share</string>
+    <string name="save_no_success">Failed to Save. Please try again</string>
+    <string name="save_success">Successfully Saved</string>
 </resources>

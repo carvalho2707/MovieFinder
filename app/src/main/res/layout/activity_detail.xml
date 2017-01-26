@@ -78,13 +78,20 @@
             android:id="@+id/tv_synopsis"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="17dp"
+            android:padding="16dp"
             android:textColor="@android:color/darker_gray" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#000000"
+            android:padding="16dp" />
 
         <TextView
             android:id="@+id/tv_trailers_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="16dp"
             android:text="@string/tv_trailers_title"
             android:textColor="@android:color/black"
             android:textSize="18sp"
@@ -93,12 +100,14 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_trailers"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:padding="16dp" />
 
         <TextView
             android:id="@+id/tv_reviews_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="16dp"
             android:text="@string/tv_reviews_title"
             android:textColor="@android:color/black"
             android:textSize="18sp"
@@ -107,7 +116,8 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_reviews"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:padding="16dp" />
 
     </LinearLayout>
 </ScrollView>
