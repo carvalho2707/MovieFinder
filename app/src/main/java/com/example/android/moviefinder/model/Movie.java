@@ -11,7 +11,8 @@ import java.util.List;
 
 public class Movie implements Parcelable {
 
-    private int id;
+    private int tmdbId;
+    private long id;
     private String posterUrl;
     private String title;
     private String synopsis;
@@ -20,8 +21,12 @@ public class Movie implements Parcelable {
     private List<String> trailerList;
     private List<String> reviewList;
 
-    public Movie(int id, String posterUrl, String title, String synopsis, String userRate, String releaseDate) {
-        this.id = id;
+    public Movie() {
+
+    }
+
+    public Movie(int tmdbId, String posterUrl, String title, String synopsis, String userRate, String releaseDate) {
+        this.tmdbId = tmdbId;
         this.posterUrl = posterUrl;
         this.title = title;
         this.synopsis = synopsis;
@@ -30,7 +35,8 @@ public class Movie implements Parcelable {
     }
 
     protected Movie(Parcel in) {
-        id = in.readInt();
+        tmdbId = in.readInt();
+        id = in.readLong();
         posterUrl = in.readString();
         title = in.readString();
         synopsis = in.readString();
@@ -57,12 +63,13 @@ public class Movie implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
+        dest.writeInt(tmdbId);
         dest.writeString(posterUrl);
         dest.writeString(title);
         dest.writeString(synopsis);
         dest.writeString(userRate);
         dest.writeString(releaseDate);
+        dest.writeLong(id);
     }
 
     public String getPosterUrl() {
@@ -105,11 +112,19 @@ public class Movie implements Parcelable {
         this.releaseDate = releaseDate;
     }
 
-    public int getId() {
+    public int getTmdbId() {
+        return tmdbId;
+    }
+
+    public void setTmdbId(int tmdbId) {
+        this.tmdbId = tmdbId;
+    }
+
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 }

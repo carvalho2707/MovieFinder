@@ -16,6 +16,7 @@ import android.support.annotation.Nullable;
 public class MovieProvider extends ContentProvider {
 
     public static final int FAVORITES_CODE = 100;
+    public static final int FAVORITES_CODE_WITH_TMDBID = 101;
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
 
@@ -40,6 +41,11 @@ public class MovieProvider extends ContentProvider {
         switch (matcher) {
             case FAVORITES_CODE:
                 cursor = db.query(MovieFinderContract.MovieFinderEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+                break;
+            case FAVORITES_CODE_WITH_TMDBID:
+                    String movieId = uri.getLastPathSegment();
+                String[] selectionArguments = new String[]{movieId};
+                cursor = db.query(MovieFinderContract.MovieFinderEntry.TABLE_NAME, projection, MovieFinderContract.MovieFinderEntry.COLUMN_TMDBID + " =? ", selectionArguments, null, null, null);
                 break;
             default:
                 throw new UnsupportedOperationException("Not supported");
@@ -99,8 +105,9 @@ public class MovieProvider extends ContentProvider {
         }
 
         switch (matcher) {
-            case FAVORITES_CODE:
-                rowsDeleted = db.delete(MovieFinderContract.MovieFinderEntry.TABLE_NAME, selection, selectionArgs);
+            case FAVORITES_CODE_WITH_TMDBID:
+                String id = uri.getPathSegments().get(1);
+                rowsDeleted = db.delete(MovieFinderContract.MovieFinderEntry.TABLE_NAME, " _id=? ", new String[]{id});
                 break;
             default:
                 throw new UnsupportedOperationException("Not supported");
@@ -122,6 +129,7 @@ public class MovieProvider extends ContentProvider {
         final String authority = MovieFinderContract.CONTENT_AUTHORITY;
 
         matcher.addURI(authority, MovieFinderContract.PATH_FAVORITES, FAVORITES_CODE);
+        matcher.addURI(authority, MovieFinderContract.PATH_FAVORITES + "/#", FAVORITES_CODE_WITH_TMDBID);
 
         return matcher;
     }

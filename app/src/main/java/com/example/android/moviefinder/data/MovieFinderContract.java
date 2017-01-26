@@ -1,5 +1,6 @@
 package com.example.android.moviefinder.data;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
@@ -25,6 +26,12 @@ public class MovieFinderContract {
         public static final String COLUMN_RELEASE_DATE = "release_date";
         public static final String COLUMN_USER_RATE = "vote_average";
         public static final String COLUMN_POSTER = "poster_path";
+
+        public static Uri buildMovieUriWithTmdbID(int id) {
+            return CONTENT_URI.buildUpon()
+                    .appendPath(Integer.toString(id))
+                    .build();
+        }
 
     }
 }

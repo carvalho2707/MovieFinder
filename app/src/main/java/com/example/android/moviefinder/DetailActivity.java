@@ -1,5 +1,6 @@
 package com.example.android.moviefinder;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,20 +8,19 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.example.android.moviefinder.adapters.MovieAdapter;
 import com.example.android.moviefinder.adapters.ReviewAdapter;
 import com.example.android.moviefinder.adapters.TrailerAdapter;
-import com.example.android.moviefinder.model.Movie;
-import com.example.android.moviefinder.tasks.MovieAsyncTaskLoader;
+import com.example.android.moviefinder.data.MovieFinderContract;
+import com.example.android.moviefinder.tasks.FavoritesByTmdbIdAsyncTaskLoader;
 import com.example.android.moviefinder.tasks.ReviewsAsyncTaskLoader;
 import com.example.android.moviefinder.tasks.TrailerAsyncTaskLoader;
 import com.example.android.moviefinder.utils.NetworkUtils;
@@ -30,14 +30,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class DetailActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<String[]>, TrailerAdapter.TrailerAdapterOnClickHandler {
-    private static final String TITLE = "title";
-    private static final String OVERVIEW = "overview";
-    private static final String RELEASE_DATE = "release_date";
-    private static final String USER_RATE = "vote_average";
-    private static final String POSTER = "poster_path";
-    private static final String TMDB_POSTER_NORMAL_SIZE = "w342";
-    private static final String ID = "tmdb_id";
-
     @BindView(R.id.tv_movie_title)
     TextView mMovieTitle;
     @BindView(R.id.iv_movie_thumbnail)
@@ -63,7 +55,12 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
 
     private static final int REVIEWS_LOADER_ID = 1;
     private static final int TRAILER_LOADER_ID = 2;
-    private int movieId;
+    private static final int FAV_LOADER_ID = 3;
+    private static final String TMDB_POSTER_NORMAL_SIZE = "w342";
+
+    private int mMovieId;
+    private long mMovieBaseId;
+    private boolean controlToggle = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,43 +71,33 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
         Intent intentThatStartedThisActivity = getIntent();
         if (intentThatStartedThisActivity != null) {
-            if (intentThatStartedThisActivity.hasExtra(TITLE)) {
-                mMovieTitle.setText(intentThatStartedThisActivity.getStringExtra(TITLE));
+            if (intentThatStartedThisActivity.hasExtra(MovieFinderContract.MovieFinderEntry.COLUMN_TITLE)) {
+                mMovieTitle.setText(intentThatStartedThisActivity.getStringExtra(MovieFinderContract.MovieFinderEntry.COLUMN_TITLE));
             }
-            if (intentThatStartedThisActivity.hasExtra(OVERVIEW)) {
-                mSynopses.setText(intentThatStartedThisActivity.getStringExtra(OVERVIEW));
+            if (intentThatStartedThisActivity.hasExtra(MovieFinderContract.MovieFinderEntry.COLUMN_OVERVIEW)) {
+                mSynopses.setText(intentThatStartedThisActivity.getStringExtra(MovieFinderContract.MovieFinderEntry.COLUMN_OVERVIEW));
             }
-            if (intentThatStartedThisActivity.hasExtra(RELEASE_DATE)) {
-                String releaseDate = intentThatStartedThisActivity.getStringExtra(RELEASE_DATE);
+            if (intentThatStartedThisActivity.hasExtra(MovieFinderContract.MovieFinderEntry.COLUMN_RELEASE_DATE)) {
+                String releaseDate = intentThatStartedThisActivity.getStringExtra(MovieFinderContract.MovieFinderEntry.COLUMN_RELEASE_DATE);
                 String year = releaseDate.substring(0, 4);
                 mReleaseDate.setText(year);
             }
-            if (intentThatStartedThisActivity.hasExtra(USER_RATE)) {
-                String userRate = intentThatStartedThisActivity.getStringExtra(USER_RATE) + "/10";
+            if (intentThatStartedThisActivity.hasExtra(MovieFinderContract.MovieFinderEntry.COLUMN_USER_RATE)) {
+                String userRate = intentThatStartedThisActivity.getStringExtra(MovieFinderContract.MovieFinderEntry.COLUMN_USER_RATE) + "/10";
+                mUserRate.setTag(intentThatStartedThisActivity.getStringExtra(MovieFinderContract.MovieFinderEntry.COLUMN_USER_RATE));
                 mUserRate.setText(userRate);
             }
-            if (intentThatStartedThisActivity.hasExtra(POSTER)) {
-                String url = NetworkUtils.IMAGE_URL + TMDB_POSTER_NORMAL_SIZE + intentThatStartedThisActivity.getStringExtra(POSTER);
+            if (intentThatStartedThisActivity.hasExtra(MovieFinderContract.MovieFinderEntry.COLUMN_POSTER)) {
+                String url = NetworkUtils.IMAGE_URL + TMDB_POSTER_NORMAL_SIZE + intentThatStartedThisActivity.getStringExtra(MovieFinderContract.MovieFinderEntry.COLUMN_POSTER);
+                mPoster.setTag(intentThatStartedThisActivity.getStringExtra(MovieFinderContract.MovieFinderEntry.COLUMN_POSTER));
                 Picasso.with(this).load(url).into(mPoster);
             }
-            if (intentThatStartedThisActivity.hasExtra(ID)) {
-                movieId = intentThatStartedThisActivity.getIntExtra(ID, 0);
-            }
+
+            mMovieId = intentThatStartedThisActivity.getIntExtra(MovieFinderContract.MovieFinderEntry.COLUMN_TMDBID, 0);
 
         }
-
-        mToggleFavorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    mToggleFavorite.setTextColor(ContextCompat.getColor(buttonView.getContext(), R.color.colorBlueSoft));
-                } else {
-                    mToggleFavorite.setTextColor(ContextCompat.getColor(buttonView.getContext(), android.R.color.darker_gray));
-                }
-            }
-        });
 
         mRecyclerViewReviews = (RecyclerView) findViewById(R.id.rv_reviews);
 
@@ -133,21 +120,58 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
 
         int reviewsLoaderId = REVIEWS_LOADER_ID;
         int trailerLoaderId = TRAILER_LOADER_ID;
+        int favLoaderId = FAV_LOADER_ID;
         LoaderManager.LoaderCallbacks<String[]> callback = DetailActivity.this;
         Bundle bundleForLoader = null;
         getSupportLoaderManager().initLoader(reviewsLoaderId, bundleForLoader, callback);
         getSupportLoaderManager().initLoader(trailerLoaderId, bundleForLoader, callback);
+        getSupportLoaderManager().initLoader(favLoaderId, bundleForLoader, callback);
 
+
+        mToggleFavorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (!controlToggle) {
+                    if (isChecked) {
+                        mToggleFavorite.setTextColor(ContextCompat.getColor(buttonView.getContext(), R.color.colorBlueSoft));
+
+                        ContentValues values = new ContentValues();
+                        values.put(MovieFinderContract.MovieFinderEntry.COLUMN_TMDBID, mMovieId);
+                        values.put(MovieFinderContract.MovieFinderEntry.COLUMN_OVERVIEW, mSynopses.getText().toString());
+                        values.put(MovieFinderContract.MovieFinderEntry.COLUMN_POSTER, (String) mPoster.getTag());
+                        values.put(MovieFinderContract.MovieFinderEntry.COLUMN_RELEASE_DATE, mReleaseDate.getText().toString());
+                        values.put(MovieFinderContract.MovieFinderEntry.COLUMN_TITLE, mMovieTitle.getText().toString());
+                        values.put(MovieFinderContract.MovieFinderEntry.COLUMN_USER_RATE, (String) mUserRate.getTag());
+
+
+                        Uri uri = getContentResolver().insert(MovieFinderContract.MovieFinderEntry.CONTENT_URI, values);
+                        String id = uri.getLastPathSegment();
+                        mMovieBaseId = Long.valueOf(id);
+
+                        if (uri != null) {
+                            Toast.makeText(getBaseContext(), uri.toString(), Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        mToggleFavorite.setTextColor(ContextCompat.getColor(buttonView.getContext(), android.R.color.darker_gray));
+
+                        Uri uri = MovieFinderContract.MovieFinderEntry.CONTENT_URI.buildUpon().appendPath(Long.toString(mMovieBaseId)).build();
+                        getContentResolver().delete(uri, null, null);
+                        getSupportLoaderManager().restartLoader(FAV_LOADER_ID, null, DetailActivity.this);
+                    }
+                }
+            }
+        });
     }
 
     @Override
     public Loader<String[]> onCreateLoader(int id, Bundle args) {
         if (id == REVIEWS_LOADER_ID) {
-            return new ReviewsAsyncTaskLoader(DetailActivity.this, movieId);
+            return new ReviewsAsyncTaskLoader(DetailActivity.this, mMovieId);
         } else if (id == TRAILER_LOADER_ID) {
-            return new TrailerAsyncTaskLoader(DetailActivity.this, movieId);
+            return new TrailerAsyncTaskLoader(DetailActivity.this, mMovieId);
+        } else if (id == FAV_LOADER_ID) {
+            return new FavoritesByTmdbIdAsyncTaskLoader(DetailActivity.this, mMovieId);
         } else {
-            return null;
+            throw new UnsupportedOperationException("NOT SUPORTED");
         }
     }
 
@@ -170,6 +194,18 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
                 } else {
                     mTrailersTitle.setVisibility(View.INVISIBLE);
                 }
+                break;
+            case FAV_LOADER_ID:
+                controlToggle = true;
+                if (data != null && data.length > 0) {
+                    mMovieBaseId = Long.valueOf(data[0]);
+                    mToggleFavorite.setChecked(true);
+                    mToggleFavorite.setTextColor(ContextCompat.getColor(this, R.color.colorBlueSoft));
+                } else {
+                    mToggleFavorite.setChecked(false);
+                    mToggleFavorite.setTextColor(ContextCompat.getColor(this, android.R.color.darker_gray));
+                }
+                controlToggle = false;
                 break;
         }
 

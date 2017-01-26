@@ -80,6 +80,51 @@ public final class TheMovieDatabaseJsonUtils {
         return results;
     }
 
+    public static Movie[] getMovieInfoSimplifiedFromJson(Context context, String moviesJsonStr)
+            throws JSONException {
+
+        Movie[] results = null;
+
+        JSONObject movieObj = new JSONObject(moviesJsonStr);
+
+        /* Is there an error? */
+        if (movieObj.has(TMDB_ERROR_MOVIES)) {
+            int errorCode = movieObj.getInt(TMDB_ERROR_MOVIES);
+
+            switch (errorCode) {
+                case HttpURLConnection.HTTP_OK:
+                    break;
+                case 34:
+                    /* Location invalid */
+                    return null;
+                default:
+                    /* Server probably down */
+                    return null;
+            }
+        }
+
+        JSONArray movieArray = movieObj.getJSONArray(TMDB_RESULTS);
+
+        results = new Movie[movieArray.length()];
+
+        for (int i = 0; i < movieArray.length(); i++) {
+            String posterPath;
+            int id;
+
+            JSONObject movie = movieArray.getJSONObject(i);
+
+            posterPath = movie.getString(TMDB_POSTER);
+            id = movie.getInt(TMDB_ID);
+
+            Movie tmp = new Movie();
+            tmp.setTmdbId(id);
+            tmp.setPosterUrl(posterPath);
+            results[i] = tmp;
+        }
+
+        return results;
+    }
+
     public static String[] getTrailersFromJson(String movieTrailerResponse) throws JSONException {
         String[] results = null;
         List<String> tempList = new ArrayList<>();
