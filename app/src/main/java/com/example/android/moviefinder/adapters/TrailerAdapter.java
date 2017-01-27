@@ -1,6 +1,5 @@
 package com.example.android.moviefinder.adapters;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,7 +59,8 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
         public TrailerAdapterViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            itemView.setOnClickListener(this);
+            mPlayButton.setOnClickListener(this);
+            mTrailerTitle.setOnClickListener(this);
         }
 
         @Override
