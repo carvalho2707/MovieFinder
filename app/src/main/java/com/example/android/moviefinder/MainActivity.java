@@ -26,11 +26,11 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler, LoaderManager.LoaderCallbacks<Movie[]>, MovieAsyncTaskLoaderListener {
     @BindView(R.id.pb_loading_indicator)
-    private ProgressBar mLoadingIndicator;
+    ProgressBar mLoadingIndicator;
     @BindView(R.id.tv_error_message_display)
-    private TextView mErrorMessageDisplay;
+    TextView mErrorMessageDisplay;
     @BindView(R.id.rv_movie)
-    private RecyclerView mRecyclerView;
+    RecyclerView mRecyclerView;
 
     private MovieAdapter movieAdapter;
 
@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     @Override
     protected void onResume() {
+        super.onResume();
         refreshData();
     }
 
@@ -108,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     @Override
     public void onClick(Movie selected) {
         Intent intent = new Intent(MainActivity.this, DetailActivity.class);
-        intent.putExtra("Movies", selected);
+        intent.putExtra("movie", selected);
         startActivity(intent);
     }
 

@@ -41,7 +41,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewAdap
 
     public class ReviewAdapterViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tv_review_content)
-        private TextView mReviewText;
+        TextView mReviewText;
 
 
         public ReviewAdapterViewHolder(View itemView) {

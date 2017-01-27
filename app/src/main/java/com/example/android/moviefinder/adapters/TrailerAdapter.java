@@ -50,10 +50,10 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
     }
 
     public class TrailerAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        @BindView(R.id.tv_trailer_numb)
-        private ImageButton mPlayButton;
         @BindView(R.id.ib_play_trailer)
-        private TextView mTrailerTitle;
+        ImageButton mPlayButton;
+        @BindView(R.id.tv_trailer_numb)
+        TextView mTrailerTitle;
 
 
         public TrailerAdapterViewHolder(View itemView) {

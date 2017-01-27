@@ -52,9 +52,9 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
     @BindView(R.id.tv_reviews_title)
     TextView mReviewsTitle;
     @BindView(R.id.rv_reviews)
-    private RecyclerView mRecyclerViewReviews;
+    RecyclerView mRecyclerViewReviews;
     @BindView(R.id.rv_trailers)
-    private RecyclerView mRecyclerViewTrailers;
+    RecyclerView mRecyclerViewTrailers;
 
     private TrailerAdapter mTrailerAdapter;
     private ReviewAdapter mReviewsAdapter;
@@ -80,8 +80,8 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
         Intent intentThatStartedThisActivity = getIntent();
         if (intentThatStartedThisActivity != null) {
             Movie movie;
-            if (intentThatStartedThisActivity.hasExtra("Movies")) {
-                movie = intentThatStartedThisActivity.getParcelableExtra("Movies");
+            if (intentThatStartedThisActivity.hasExtra("movie")) {
+                movie = intentThatStartedThisActivity.getParcelableExtra("movie");
                 mMovieTitle.setText(movie.getTitle());
                 mSynopses.setText(movie.getSynopsis());
                 mReleaseDate.setText(movie.getReleaseDate().substring(0, 4));

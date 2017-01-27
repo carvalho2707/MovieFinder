@@ -25,16 +25,14 @@ public class Movie implements Parcelable {
 
     }
 
-    protected Movie(Parcel in) {
-        tmdbId = in.readInt();
-        id = in.readLong();
-        posterUrl = in.readString();
-        title = in.readString();
-        synopsis = in.readString();
-        userRate = in.readString();
-        releaseDate = in.readString();
-        trailerList = (List<String>) in.readSerializable();
-        reviewList = (List<String>) in.readSerializable();
+    private Movie(Parcel in) {
+        this.tmdbId = in.readInt();
+        this.id = in.readLong();
+        this.posterUrl = in.readString();
+        this.title = in.readString();
+        this.synopsis = in.readString();
+        this.userRate = in.readString();
+        this.releaseDate = in.readString();
     }
 
     public static final Creator<Movie> CREATOR = new Creator<Movie>() {
@@ -51,20 +49,18 @@ public class Movie implements Parcelable {
 
     @Override
     public int describeContents() {
-        return 0;
+        return hashCode();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(tmdbId);
+        dest.writeLong(id);
         dest.writeString(posterUrl);
         dest.writeString(title);
         dest.writeString(synopsis);
         dest.writeString(userRate);
         dest.writeString(releaseDate);
-        dest.writeLong(id);
-        dest.writeList(trailerList);
-        dest.writeList(reviewList);
     }
 
     public String getPosterUrl() {

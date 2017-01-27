@@ -73,7 +73,13 @@ public final class TheMovieDatabaseJsonUtils {
             releaseDate = movie.getString(TMDB_RELEASE_DATE);
             id = movie.getInt(TMDB_ID);
 
-            Movie tmp = new Movie(id, posterPath, title, synopsis, userRate, releaseDate);
+            Movie tmp = new Movie();
+            tmp.setPosterUrl(posterPath);
+            tmp.setTitle(title);
+            tmp.setSynopsis(synopsis);
+            tmp.setUserRate(userRate);
+            tmp.setReleaseDate(releaseDate);
+            tmp.setTmdbId(id);
             results[i] = tmp;
         }
 
