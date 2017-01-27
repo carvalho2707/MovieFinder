@@ -24,6 +24,7 @@ import android.widget.ToggleButton;
 import com.example.android.moviefinder.adapters.ReviewAdapter;
 import com.example.android.moviefinder.adapters.TrailerAdapter;
 import com.example.android.moviefinder.data.MovieFinderContract;
+import com.example.android.moviefinder.model.Movie;
 import com.example.android.moviefinder.tasks.FavoritesByTmdbIdAsyncTaskLoader;
 import com.example.android.moviefinder.tasks.ReviewsAsyncTaskLoader;
 import com.example.android.moviefinder.tasks.TrailerAsyncTaskLoader;
@@ -50,12 +51,13 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
     TextView mTrailersTitle;
     @BindView(R.id.tv_reviews_title)
     TextView mReviewsTitle;
-
+    @BindView(R.id.rv_reviews)
     private RecyclerView mRecyclerViewReviews;
-    private ReviewAdapter mReviewsAdapter;
-
+    @BindView(R.id.rv_trailers)
     private RecyclerView mRecyclerViewTrailers;
+
     private TrailerAdapter mTrailerAdapter;
+    private ReviewAdapter mReviewsAdapter;
 
     private static final int REVIEWS_LOADER_ID = 1;
     private static final int TRAILER_LOADER_ID = 2;
@@ -77,33 +79,19 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         Intent intentThatStartedThisActivity = getIntent();
         if (intentThatStartedThisActivity != null) {
-            if (intentThatStartedThisActivity.hasExtra(MovieFinderContract.MovieFinderEntry.COLUMN_TITLE)) {
-                mMovieTitle.setText(intentThatStartedThisActivity.getStringExtra(MovieFinderContract.MovieFinderEntry.COLUMN_TITLE));
-            }
-            if (intentThatStartedThisActivity.hasExtra(MovieFinderContract.MovieFinderEntry.COLUMN_OVERVIEW)) {
-                mSynopses.setText(intentThatStartedThisActivity.getStringExtra(MovieFinderContract.MovieFinderEntry.COLUMN_OVERVIEW));
-            }
-            if (intentThatStartedThisActivity.hasExtra(MovieFinderContract.MovieFinderEntry.COLUMN_RELEASE_DATE)) {
-                String releaseDate = intentThatStartedThisActivity.getStringExtra(MovieFinderContract.MovieFinderEntry.COLUMN_RELEASE_DATE);
-                String year = releaseDate.substring(0, 4);
-                mReleaseDate.setText(year);
-            }
-            if (intentThatStartedThisActivity.hasExtra(MovieFinderContract.MovieFinderEntry.COLUMN_USER_RATE)) {
-                String userRate = intentThatStartedThisActivity.getStringExtra(MovieFinderContract.MovieFinderEntry.COLUMN_USER_RATE) + "/10";
-                mUserRate.setTag(intentThatStartedThisActivity.getStringExtra(MovieFinderContract.MovieFinderEntry.COLUMN_USER_RATE));
-                mUserRate.setText(userRate);
-            }
-            if (intentThatStartedThisActivity.hasExtra(MovieFinderContract.MovieFinderEntry.COLUMN_POSTER)) {
-                String url = NetworkUtils.IMAGE_URL + TMDB_POSTER_NORMAL_SIZE + intentThatStartedThisActivity.getStringExtra(MovieFinderContract.MovieFinderEntry.COLUMN_POSTER);
-                mPoster.setTag(intentThatStartedThisActivity.getStringExtra(MovieFinderContract.MovieFinderEntry.COLUMN_POSTER));
+            Movie movie;
+            if (intentThatStartedThisActivity.hasExtra("Movies")) {
+                movie = intentThatStartedThisActivity.getParcelableExtra("Movies");
+                mMovieTitle.setText(movie.getTitle());
+                mSynopses.setText(movie.getSynopsis());
+                mReleaseDate.setText(movie.getReleaseDate().substring(0, 4));
+                mUserRate.setText(movie.getUserRate() + "/10");
+                String url = NetworkUtils.IMAGE_URL + TMDB_POSTER_NORMAL_SIZE + movie.getPosterUrl();
+                mPoster.setTag(movie.getPosterUrl());
                 Picasso.with(this).load(url).into(mPoster);
+                mMovieId = movie.getTmdbId();
             }
-
-            mMovieId = intentThatStartedThisActivity.getIntExtra(MovieFinderContract.MovieFinderEntry.COLUMN_TMDBID, 0);
-
         }
-
-        mRecyclerViewReviews = (RecyclerView) findViewById(R.id.rv_reviews);
 
         LinearLayoutManager layoutReviewManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerViewReviews.setLayoutManager(layoutReviewManager);
@@ -112,8 +100,6 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
         mRecyclerViewReviews.setAdapter(mReviewsAdapter);
         mRecyclerViewReviews.setHasFixedSize(true);
 
-        mRecyclerViewTrailers = (RecyclerView) findViewById(R.id.rv_trailers);
-
         LinearLayoutManager layoutTrailerManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerViewTrailers.setLayoutManager(layoutTrailerManager);
 
@@ -121,16 +107,11 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
         mRecyclerViewTrailers.setAdapter(mTrailerAdapter);
         mRecyclerViewTrailers.setHasFixedSize(true);
 
-
-        int reviewsLoaderId = REVIEWS_LOADER_ID;
-        int trailerLoaderId = TRAILER_LOADER_ID;
-        int favLoaderId = FAV_LOADER_ID;
         LoaderManager.LoaderCallbacks<String[]> callback = DetailActivity.this;
         Bundle bundleForLoader = null;
-        getSupportLoaderManager().initLoader(reviewsLoaderId, bundleForLoader, callback);
-        getSupportLoaderManager().initLoader(trailerLoaderId, bundleForLoader, callback);
-        getSupportLoaderManager().initLoader(favLoaderId, bundleForLoader, callback);
-
+        getSupportLoaderManager().initLoader(REVIEWS_LOADER_ID, bundleForLoader, callback);
+        getSupportLoaderManager().initLoader(TRAILER_LOADER_ID, bundleForLoader, callback);
+        getSupportLoaderManager().initLoader(FAV_LOADER_ID, bundleForLoader, callback);
 
         mToggleFavorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -181,7 +162,7 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
         } else if (id == FAV_LOADER_ID) {
             return new FavoritesByTmdbIdAsyncTaskLoader(DetailActivity.this, mMovieId);
         } else {
-            throw new UnsupportedOperationException("NOT SUPORTED");
+            throw new UnsupportedOperationException(getString(R.string.not_supported_operation));
         }
     }
 
@@ -223,19 +204,19 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
 
     @Override
     public void onLoaderReset(Loader<String[]> loader) {
-        /*
-         * We aren't using this method in our example application, but we are required to Override
-         * it to implement the LoaderCallbacks<String> interface
-         */
     }
 
     @Override
     public void onClick(String id) {
-        String videoId = id;
-
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + videoId));
-        intent.putExtra("VIDEO_ID", videoId);
-        startActivity(intent);
+        String youtubePackageName = "com.google.android.youtube";
+        if (isAppInstalled(youtubePackageName)) {
+            Intent youtubeIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + id));
+            youtubeIntent.putExtra("VIDEO_ID", id);
+            startActivity(youtubeIntent);
+        } else {
+            Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + id));
+            startActivity(webIntent);
+        }
     }
 
     private Intent createShareForecastIntent() {
@@ -272,5 +253,14 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    protected boolean isAppInstalled(String packageName) {
+        Intent mIntent = getPackageManager().getLaunchIntentForPackage(packageName);
+        if (mIntent != null) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

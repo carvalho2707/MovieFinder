@@ -1,6 +1,5 @@
 package com.example.android.moviefinder.data;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.provider.BaseColumns;
 

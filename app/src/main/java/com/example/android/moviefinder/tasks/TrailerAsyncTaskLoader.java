@@ -3,8 +3,8 @@ package com.example.android.moviefinder.tasks;
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 
-import com.example.android.moviefinder.utils.TheMovieDatabaseJsonUtils;
 import com.example.android.moviefinder.utils.NetworkUtils;
+import com.example.android.moviefinder.utils.TheMovieDatabaseJsonUtils;
 
 import org.json.JSONException;
 

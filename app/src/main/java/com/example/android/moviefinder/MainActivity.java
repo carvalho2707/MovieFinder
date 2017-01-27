@@ -15,17 +15,27 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.android.moviefinder.adapters.MovieAdapter;
-import com.example.android.moviefinder.data.MovieFinderContract;
 import com.example.android.moviefinder.model.Movie;
 import com.example.android.moviefinder.tasks.FavoritesAsyncTaskLoader;
 import com.example.android.moviefinder.tasks.MovieAsyncTaskLoader;
 import com.example.android.moviefinder.tasks.MovieAsyncTaskLoaderListener;
 import com.example.android.moviefinder.utils.NetworkUtils;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler, LoaderManager.LoaderCallbacks<Movie[]>, MovieAsyncTaskLoaderListener {
+    @BindView(R.id.pb_loading_indicator)
+    private ProgressBar mLoadingIndicator;
+    @BindView(R.id.tv_error_message_display)
+    private TextView mErrorMessageDisplay;
+    @BindView(R.id.rv_movie)
+    private RecyclerView mRecyclerView;
+
+    private MovieAdapter movieAdapter;
+
     private static final String SORT_KEY = "sort_key";
     private static final String FAVORITE_KEY = "favorite_key";
-
     private static final int MOVIE_LOADER_ID = 0;
     private static final int FAVORITES_LOADER_ID = 1;
 
@@ -34,16 +44,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private String currentSort;
     private String currentFilterFavorites;
 
-    private RecyclerView mRecyclerView;
-    private MovieAdapter movieAdapter;
-    private TextView mErrorMessageDisplay;
-
-    private ProgressBar mLoadingIndicator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ButterKnife.bind(this);
 
         currentFilterFavorites = "OFF";
         currentSort = NetworkUtils.MOST_POPULAR;
@@ -58,10 +65,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             }
         }
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.rv_movie);
-        mErrorMessageDisplay = (TextView) findViewById(R.id.tv_error_message_display);
-        mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
-
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
 
@@ -69,6 +72,10 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         mRecyclerView.setAdapter(movieAdapter);
         mRecyclerView.setHasFixedSize(true);
 
+    }
+
+    @Override
+    protected void onResume() {
         refreshData();
     }
 
@@ -80,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             case FAVORITES_LOADER_ID:
                 return new FavoritesAsyncTaskLoader(MainActivity.this, this);
             default:
-                throw new UnsupportedOperationException("NOT SUPPORTED");
+                throw new UnsupportedOperationException(getString(R.string.not_supported_operation));
         }
     }
 
@@ -96,21 +103,12 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     @Override
     public void onLoaderReset(Loader<Movie[]> loader) {
-        /*
-         * We aren't using this method in our example application, but we are required to Override
-         * it to implement the LoaderCallbacks<String> interface
-         */
     }
 
     @Override
     public void onClick(Movie selected) {
         Intent intent = new Intent(MainActivity.this, DetailActivity.class);
-        intent.putExtra(MovieFinderContract.MovieFinderEntry.COLUMN_TMDBID, selected.getTmdbId());
-        intent.putExtra(MovieFinderContract.MovieFinderEntry.COLUMN_OVERVIEW, selected.getSynopsis());
-        intent.putExtra(MovieFinderContract.MovieFinderEntry.COLUMN_POSTER, selected.getPosterUrl());
-        intent.putExtra(MovieFinderContract.MovieFinderEntry.COLUMN_RELEASE_DATE, selected.getReleaseDate());
-        intent.putExtra(MovieFinderContract.MovieFinderEntry.COLUMN_TITLE, selected.getTitle());
-        intent.putExtra(MovieFinderContract.MovieFinderEntry.COLUMN_USER_RATE, selected.getUserRate());
+        intent.putExtra("Movies", selected);
         startActivity(intent);
     }
 

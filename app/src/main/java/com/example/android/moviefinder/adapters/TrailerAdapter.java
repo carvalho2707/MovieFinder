@@ -10,6 +10,9 @@ import android.widget.TextView;
 
 import com.example.android.moviefinder.R;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 
 public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerAdapterViewHolder> {
     private String[] trailerArray;
@@ -17,7 +20,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
     private TrailerAdapterOnClickHandler mClickHandler;
 
     public interface TrailerAdapterOnClickHandler {
-        public void onClick(String url);
+        void onClick(String url);
     }
 
     public TrailerAdapter(TrailerAdapterOnClickHandler handler) {
@@ -27,11 +30,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
 
     @Override
     public TrailerAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
-        int layoutId = R.layout.trailer_item;
-        LayoutInflater inflater = LayoutInflater.from(context);
-        boolean shouldAttachToParentImmediately = false;
-        View view = inflater.inflate(layoutId, parent, shouldAttachToParentImmediately);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.trailer_item, parent, false);
         return new TrailerAdapterViewHolder(view);
     }
 
@@ -51,14 +50,15 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
     }
 
     public class TrailerAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        @BindView(R.id.tv_trailer_numb)
         private ImageButton mPlayButton;
+        @BindView(R.id.ib_play_trailer)
         private TextView mTrailerTitle;
 
 
         public TrailerAdapterViewHolder(View itemView) {
             super(itemView);
-            mPlayButton = (ImageButton) itemView.findViewById(R.id.ib_play_trailer);
-            mTrailerTitle = (TextView) itemView.findViewById(R.id.tv_trailer_numb);
+            ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
         }
 

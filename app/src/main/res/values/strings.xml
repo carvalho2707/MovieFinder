@@ -13,4 +13,5 @@
     <string name="action_share">Share</string>
     <string name="save_no_success">Failed to Save. Please try again</string>
     <string name="save_success">Successfully Saved</string>
+    <string name="not_supported_operation">Not Suported</string>
 </resources>

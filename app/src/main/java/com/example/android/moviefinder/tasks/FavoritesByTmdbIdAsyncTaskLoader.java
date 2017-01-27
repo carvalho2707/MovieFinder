@@ -2,11 +2,9 @@ package com.example.android.moviefinder.tasks;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.net.Uri;
 import android.support.v4.content.AsyncTaskLoader;
 
 import com.example.android.moviefinder.data.MovieFinderContract;
-import com.example.android.moviefinder.model.Movie;
 
 /**
  * Created by tiago.carvalho on 01/23/17.

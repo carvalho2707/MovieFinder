@@ -1,6 +1,5 @@
 package com.example.android.moviefinder.adapters;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +12,9 @@ import com.example.android.moviefinder.model.Movie;
 import com.example.android.moviefinder.utils.NetworkUtils;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by tiago.carvalho on 01/17/17.
@@ -32,12 +34,13 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
     }
 
     public class MovieAdapterViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
+        @BindView(R.id.iv_movie_poster)
         private ImageView mMoviePoster;
 
 
         public MovieAdapterViewHolder(View itemView) {
             super(itemView);
-            mMoviePoster = (ImageView) itemView.findViewById(R.id.iv_movie_poster);
+            ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
         }
 
@@ -58,11 +61,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
 
     @Override
     public MovieAdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        Context context = viewGroup.getContext();
-        int layoutId = R.layout.movie_item;
-        LayoutInflater inflater = LayoutInflater.from(context);
-        boolean shouldAttachToParentImmediately = false;
-        View view = inflater.inflate(layoutId, viewGroup, shouldAttachToParentImmediately);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.movie_item, viewGroup, false);
         return new MovieAdapterViewHolder(view);
     }
 

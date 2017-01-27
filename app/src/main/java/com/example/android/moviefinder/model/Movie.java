@@ -25,15 +25,6 @@ public class Movie implements Parcelable {
 
     }
 
-    public Movie(int tmdbId, String posterUrl, String title, String synopsis, String userRate, String releaseDate) {
-        this.tmdbId = tmdbId;
-        this.posterUrl = posterUrl;
-        this.title = title;
-        this.synopsis = synopsis;
-        this.userRate = userRate;
-        this.releaseDate = releaseDate;
-    }
-
     protected Movie(Parcel in) {
         tmdbId = in.readInt();
         id = in.readLong();
@@ -42,6 +33,8 @@ public class Movie implements Parcelable {
         synopsis = in.readString();
         userRate = in.readString();
         releaseDate = in.readString();
+        trailerList = (List<String>) in.readSerializable();
+        reviewList = (List<String>) in.readSerializable();
     }
 
     public static final Creator<Movie> CREATOR = new Creator<Movie>() {
@@ -70,6 +63,8 @@ public class Movie implements Parcelable {
         dest.writeString(userRate);
         dest.writeString(releaseDate);
         dest.writeLong(id);
+        dest.writeList(trailerList);
+        dest.writeList(reviewList);
     }
 
     public String getPosterUrl() {
@@ -126,5 +121,21 @@ public class Movie implements Parcelable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public List<String> getTrailerList() {
+        return trailerList;
+    }
+
+    public void setTrailerList(List<String> trailerList) {
+        this.trailerList = trailerList;
+    }
+
+    public List<String> getReviewList() {
+        return reviewList;
+    }
+
+    public void setReviewList(List<String> reviewList) {
+        this.reviewList = reviewList;
     }
 }

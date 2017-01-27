@@ -84,7 +84,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#000000"
+            android:background="@android:color/transparent"
             android:padding="16dp" />
 
         <TextView

@@ -9,6 +9,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 
+import com.example.android.moviefinder.R;
+
 /**
  * Created by tiago.carvalho on 01/25/17.
  */
@@ -43,12 +45,12 @@ public class MovieProvider extends ContentProvider {
                 cursor = db.query(MovieFinderContract.MovieFinderEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
             case FAVORITES_CODE_WITH_TMDBID:
-                    String movieId = uri.getLastPathSegment();
+                String movieId = uri.getLastPathSegment();
                 String[] selectionArguments = new String[]{movieId};
                 cursor = db.query(MovieFinderContract.MovieFinderEntry.TABLE_NAME, projection, MovieFinderContract.MovieFinderEntry.COLUMN_TMDBID + " =? ", selectionArguments, null, null, null);
                 break;
             default:
-                throw new UnsupportedOperationException("Not supported");
+                throw new UnsupportedOperationException(getContext().getString(R.string.not_supported_operation));
         }
 
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
@@ -87,7 +89,7 @@ public class MovieProvider extends ContentProvider {
                 }
                 break;
             default:
-                throw new UnsupportedOperationException("Not supported");
+                throw new UnsupportedOperationException(getContext().getString(R.string.not_supported_operation));
         }
 
         getContext().getContentResolver().notifyChange(uri, null);
@@ -110,7 +112,7 @@ public class MovieProvider extends ContentProvider {
                 rowsDeleted = db.delete(MovieFinderContract.MovieFinderEntry.TABLE_NAME, " _id=? ", new String[]{id});
                 break;
             default:
-                throw new UnsupportedOperationException("Not supported");
+                throw new UnsupportedOperationException(getContext().getString(R.string.not_supported_operation));
         }
         if (rowsDeleted != 0) {
             getContext().getContentResolver().notifyChange(uri, null);
@@ -121,7 +123,7 @@ public class MovieProvider extends ContentProvider {
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        throw new UnsupportedOperationException(getContext().getString(R.string.not_supported_operation));
     }
 
     public static UriMatcher buildUriMatcher() {
