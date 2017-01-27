@@ -17,16 +17,16 @@
             android:layout_weight="1"
             android:background="@color/colorBlueSoft"
             android:gravity="center_vertical"
-            android:paddingLeft="20dp"
+            android:paddingLeft="@dimen/default_padding"
             android:text="@string/movie_title"
             android:textColor="@android:color/white"
-            android:textSize="40sp" />
+            android:textSize="@dimen/movie_title" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="16dp"
+            android:padding="@dimen/default_padding"
             android:weightSum="3">
 
             <ImageView
@@ -34,15 +34,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp" />
+                android:paddingLeft="@dimen/default_padding"
+                android:paddingRight="@dimen/default_padding" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:orientation="vertical"
-                android:paddingLeft="16dp">
+                android:paddingLeft="@dimen/default_padding">
 
                 <TextView
                     android:id="@+id/tv_movie_release"
@@ -50,7 +50,7 @@
                     android:layout_height="wrap_content"
                     android:text="TextView"
                     android:textColor="@android:color/darker_gray"
-                    android:textSize="34sp" />
+                    android:textSize="@dimen/moview_realeasedate_text_size" />
 
                 <TextView
                     android:id="@+id/tv_movie_rate"
@@ -58,7 +58,7 @@
                     android:layout_height="wrap_content"
                     android:text="TextView"
                     android:textColor="@android:color/black"
-                    android:textSize="18sp" />
+                    android:textSize="@dimen/moview_user_rate_text_size" />
 
                 <ToggleButton
                     android:id="@+id/tb_mark_favorite"
@@ -78,46 +78,46 @@
             android:id="@+id/tv_synopsis"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
+            android:padding="@dimen/default_padding"
             android:textColor="@android:color/darker_gray" />
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="@dimen/view_line_divisor"
             android:background="@android:color/transparent"
-            android:padding="16dp" />
+            android:padding="@dimen/default_padding" />
 
         <TextView
             android:id="@+id/tv_trailers_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
+            android:padding="@dimen/default_padding"
             android:text="@string/tv_trailers_title"
             android:textColor="@android:color/black"
-            android:textSize="18sp"
+            android:textSize="@dimen/trailer_section_text_size"
             android:visibility="invisible" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_trailers"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp" />
+            android:padding="@dimen/default_padding" />
 
         <TextView
             android:id="@+id/tv_reviews_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
+            android:padding="@dimen/default_padding"
             android:text="@string/tv_reviews_title"
             android:textColor="@android:color/black"
-            android:textSize="18sp"
+            android:textSize="@dimen/review_section_text_size"
             android:visibility="invisible" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_reviews"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp" />
+            android:padding="@dimen/default_padding" />
 
     </LinearLayout>
 </ScrollView>
