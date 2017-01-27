@@ -221,7 +221,6 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
 
     private Intent createShareForecastIntent() {
         String[] trailers = mTrailerAdapter.getTrailerData();
-        trailers = null;
         if (null != trailers && trailers.length > 0) {
             String trailerSuffix = trailers[0];
             String urlToShare = "https://www.youtube.com/watch?v=" + trailerSuffix;
